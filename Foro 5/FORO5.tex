@@ -1,0 +1,78 @@
+\documentclass[12pt,letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage[margin=2.54cm]{geometry}
+\usepackage{mathptmx} % Equivalente a Times New Roman
+\usepackage{setspace}
+\usepackage{enumitem}
+\usepackage{hyperref}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\singlespacing
+
+\begin{document}
+
+\begin{center}
+\textbf{\Large ORDEN LA NUBE}
+\end{center}
+
+\begin{center}
+\textit{P.L. Alvarez Gonzalez } \\
+\textit{7690-22-5839} \\
+Universidad Mariano Gálvez de Guatemala \\
+Seminario de Tecnologías de Información \\
+\textit{palvarezg1@miumg.edu.gt}
+\end{center}
+
+\vspace{0.5cm}
+
+\textbf{Resumen}
+
+El objetivo de este ensayo es explicar cómo se conectan cinco conceptos que son la base de las aplicaciones modernas que corren en la nube: la orquestación de servidores, Kubernetes, los microservicios, el protocolo OAuth 2.0 y la metodología de los doce factores (12-factor app). Para lograrlo se investigó y se ordenó la información mostrando cómo cada pieza resuelve un problema específico dentro del mismo panorama: tener aplicaciones divididas en servicios pequeños, administrarlas de forma automática sin que una persona tenga que estar encendiendo y apagando servidores a mano, protegerlas con un estándar de autorización confiable, y construirlas siguiendo buenas prácticas que las hagan fáciles de escalar y mantener. Como resultado se armó una explicación clara de por qué estas tecnologías casi siempre aparecen juntas en proyectos reales. Se concluye que ninguna de estas herramientas funciona aislada; más bien, se complementan entre sí para resolver el reto de tener aplicaciones grandes, seguras y disponibles todo el tiempo.
+
+\textbf{Palabras clave:} orquestación, Kubernetes, microservicios, OAuth 2.0, 12-factor app.
+
+\textbf{Desarrollo del tema}
+
+Cuando una aplicación se divide en microservicios, es decir, en varios servicios pequeños e independientes que se encargan cada uno de una función específica, surge un problema nuevo: alguien tiene que encargarse de mantener todos esos servicios funcionando, de reiniciarlos si se caen, de repartir la carga entre varias copias del mismo servicio y de asegurarse de que se comuniquen bien entre sí. A esa tarea se le llama orquestación de servidores o de contenedores, y básicamente consiste en automatizar todo el ciclo de vida de los servicios: cuándo se crean, cuándo se destruyen, cuántas copias deben existir y cómo se reparten los recursos disponibles.
+
+Kubernetes es, hoy en día, la herramienta más usada para hacer esta orquestación. Fue creada originalmente por Google y se volvió el estándar de la industria para manejar aplicaciones basadas en contenedores. Kubernetes organiza todo alrededor de unidades llamadas pods, que son la unidad mínima donde corre un contenedor (o varios relacionados entre sí), y estos pods viven dentro de nodos, que son las máquinas físicas o virtuales donde realmente se ejecuta todo. Kubernetes se encarga de decidir en qué nodo debe correr cada pod, de reiniciar automáticamente los que fallan, y de escalar hacia arriba o hacia abajo la cantidad de copias de un servicio según la carga que esté recibiendo en ese momento. Gracias a esto, un equipo de desarrollo no tiene que estar pendiente manualmente de si un servicio se cayó a las tres de la mañana, porque Kubernetes lo levanta de nuevo solo.
+
+Los microservicios son justamente el tipo de arquitectura que más se beneficia de este tipo de orquestación. Como cada microservicio es independiente y se puede escalar por separado, tiene mucho sentido que exista una herramienta como Kubernetes que administre docenas o hasta cientos de estos servicios corriendo al mismo tiempo, sin que un humano tenga que hacerlo todo a mano.
+
+Ahora bien, tener varios servicios comunicándose entre sí trae un reto adicional: la seguridad. Aquí es donde entra OAuth 2.0, que es un protocolo de autorización (no de autenticación, esa es una diferencia importante) que permite que una aplicación acceda a los recursos de otra sin necesidad de compartir contraseñas directamente. En vez de eso, OAuth 2.0 funciona entregando tokens de acceso, que son como llaves temporales que le dan permiso a una aplicación para hacer ciertas acciones específicas en nombre de un usuario, sin exponer sus credenciales reales. Esto es clave en un entorno de microservicios, porque cada servicio necesita comunicarse con otros de forma segura, y OAuth 2.0 ofrece una manera estandarizada de hacerlo sin inventar un sistema de seguridad distinto para cada aplicación (Hardt, 2012).
+
+Por último está la metodología de los doce factores, conocida como 12-factor app, que es un conjunto de buenas prácticas pensadas específicamente para construir aplicaciones que funcionen bien en la nube. Entre los puntos más importantes de esta metodología está mantener la configuración separada del código (por ejemplo, usando variables de entorno en vez de escribir contraseñas directamente en el código), tratar los procesos de la aplicación como algo que no guarda información en memoria (stateless), para que se puedan apagar y encender sin perder datos importantes, y declarar explícitamente todas las dependencias del proyecto para que corra igual en cualquier servidor donde se despliegue (Wiggins, 2017). Seguir esta metodología facilita muchísimo que una aplicación se pueda desplegar dentro de un sistema orquestado como Kubernetes, porque los servicios quedan diseñados desde el inicio para escalar y reiniciarse sin problemas.
+
+Al final, estos cinco conceptos se conectan de la siguiente manera: los microservicios dividen la aplicación en piezas pequeñas, la metodología de 12-factor app asegura que esas piezas estén bien construidas para la nube, Kubernetes se encarga de orquestar y mantener corriendo todas esas piezas de forma automática, y OAuth 2.0 protege la comunicación y el acceso entre esas piezas y los usuarios.
+
+\textbf{Observaciones y comentarios}
+
+Durante esta investigación se pudo notar que muchos proyectos adoptan Kubernetes sin realmente necesitarlo, solo porque es la tendencia del momento, cuando en realidad su complejidad de configuración solo se justifica cuando hay muchos microservicios que administrar. También se observó que la seguridad con OAuth 2.0 se suele implementar mal cuando los desarrolladores no entienden bien la diferencia entre autenticación (confirmar quién es el usuario) y autorización (confirmar qué puede hacer ese usuario), lo cual puede dejar huecos de seguridad importantes. Una limitación de este trabajo es que no se profundizó en ejemplos prácticos de configuración real de Kubernetes o de un flujo completo de OAuth 2.0, lo cual sería un buen tema para complementar en una investigación futura o en un laboratorio del curso.
+
+\textbf{Conclusiones}
+
+\begin{enumerate}[label=\arabic*.]
+\item La orquestación de servidores automatiza tareas que antes se hacían manualmente, como reiniciar servicios caídos o escalar según la demanda.
+\item Kubernetes es el estándar actual para orquestar aplicaciones basadas en contenedores y microservicios.
+\item OAuth 2.0 resuelve el problema de la autorización segura entre servicios sin exponer contraseñas directamente.
+\item Seguir la metodología de 12-factor app desde el diseño facilita que una aplicación se adapte bien a un entorno orquestado en la nube.
+\end{enumerate}
+
+\textbf{Referencias}
+
+Burns, B., Beda, J., \& Hightower, K. (2019). \textit{Kubernetes: Up and running} (2.ª ed.). O'Reilly Media.
+
+Hardt, D. (2012). \textit{The OAuth 2.0 authorization framework} (RFC 6749). Internet Engineering Task Force.
+
+Newman, S. (2021). \textit{Building microservices: Designing fine-grained systems} (2.ª ed.). O'Reilly Media.
+
+Wiggins, A. (2017). \textit{The twelve-factor app}. https://12factor.net
+
+\end{spacing}
+
+\vspace{12pt}
+\noindent\small Repositorio Git: \url{https://github.com/PLAlvarez11/seminario-encuesta.git}
+
+\end{document}
